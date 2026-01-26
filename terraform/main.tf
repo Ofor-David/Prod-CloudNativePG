@@ -12,21 +12,14 @@ resource "google_container_cluster" "cnpg-primary" {
   # node pool and immediately delete it.
   remove_default_node_pool = true
   initial_node_count       = 1
-  node_config {
-    preemptible  = true
-    machine_type = var.node_type
-    disk_size_gb = var.node_disk_size
-    disk_type = var.node_disk_type
-    
-  }
-  deletion_protection = false
+  deletion_protection = true
 }
 
 resource "google_container_node_pool" "primary_preemptible_nodes" {
   name       = "cnpg-node-pool"
   location   = "${var.region}-a"
   cluster    = google_container_cluster.cnpg-primary.name
-  node_count = 1
+  node_count = 2
 
 
   node_config {
