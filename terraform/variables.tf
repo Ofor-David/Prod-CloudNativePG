@@ -22,3 +22,17 @@ variable "node_disk_type" {
 variable "cluster_name"{
     type = string
 }
+variable "backup_bucket_region" {
+  type = string
+}
+variable "backup_bucket_name" {
+  type = string
+}
+
+variable "ksa_name" {
+  type = string
+}
+
+variable "db_namespace" {
+  type = string
+}
