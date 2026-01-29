@@ -4,6 +4,14 @@ metadata:
   name: cnpg-cluster
   namespace: database
 spec:
-  instances: 1    # number of Postgres instances
+  instances: 2    # number of Postgres instances
+  serviceAccountTemplate:
+    metadata:
+      name: cnpg
   storage:
-    size: 5Gi           # PVC size
+    size: 1Gi           # PVC size
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: google-store

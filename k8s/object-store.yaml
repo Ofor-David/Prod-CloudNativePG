@@ -1,0 +1,13 @@
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: google-store
+  namespace: database
+spec:
+  configuration:
+    destinationPath: "gs://cnpg_cluster_backups"
+    googleCredentials:
+        gkeEnvironment: true
+    wal:
+      compression: gzip
+      encryption: AES256

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cnpg
+  namespace: database
+  annotations:
+    iam.gke.io/gcp-service-account: cnpg-backup@cnpg-project.iam.gserviceaccount.com
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cnpg-cluster
+  namespace: database
+  annotations:
+    iam.gke.io/gcp-service-account: cnpg-backup@cnpg-project.iam.gserviceaccount.com
