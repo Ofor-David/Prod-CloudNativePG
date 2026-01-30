@@ -1,9 +1,11 @@
 apiVersion: postgresql.cnpg.io/v1
-kind: Backup
+kind: ScheduledBackup
 metadata:
-  name: backup-example
+  name: daily-backup
   namespace: database
 spec:
+  schedule: "0 0 0 * * *"  # At midnight every day
+  backupOwnerReference: self
   cluster:
     name: cnpg-cluster
   method: plugin
