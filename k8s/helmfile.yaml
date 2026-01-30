@@ -16,7 +16,7 @@ releases:
     installed: true
     wait: true
     set:
-      - name: installCRDs
+      - name: crds.enabled
         value: true
 
   # CNPG Operator (includes barman-cloud plugin sidecar injection)
@@ -27,16 +27,15 @@ releases:
     needs:
       - cert-manager/cert-manager
 
-  # Barman Cloud plugin CRD (required for ObjectStore CRD)
+  # Barman Cloud plugin CRD (required for ObjectStore and Backup CRDs)
   - name: barman-cloud
-    namespace: cnpg-system
+    namespace: database
     chart: cloudnative-pg/plugin-barman-cloud
     version: 0.4.0
     createNamespace: false
+    installed: true
     wait: true
-    needs:
-      - cert-manager/cert-manager
-      
+
   # external secret manager
   - name: external-secrets
     namespace: external-secrets
