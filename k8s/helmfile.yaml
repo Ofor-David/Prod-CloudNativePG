@@ -1,17 +1,20 @@
 repositories:
-  - name: jetstack
+  - name: cert-manager
     url: https://charts.jetstack.io
-  - name: cnpg
+  - name: cloudnative-pg
     url: https://cloudnative-pg.github.io/charts
-  - name: emberstack
-    url: https://emberstack.github.io/helm-charts
+  - name: external-secrets
+    url: https://charts.external-secrets.io
+
 releases:
   # cert-Manager (required for CNPG webhook certificates)
   - name: cert-manager
     namespace: cert-manager
-    chart: jetstack/cert-manager
+    chart: cert-manager/cert-manager
     version: v1.19.2
     createNamespace: true
+    installed: true
+    wait: true
     set:
       - name: installCRDs
         value: true
@@ -19,7 +22,7 @@ releases:
   # CNPG Operator (includes barman-cloud plugin sidecar injection)
   - name: cnpg
     namespace: cnpg-system
-    chart: cnpg/cloudnative-pg
+    chart: cloudnative-pg/cloudnative-pg
     createNamespace: true
     needs:
       - cert-manager/cert-manager
@@ -27,8 +30,24 @@ releases:
   # Barman Cloud plugin CRD (required for ObjectStore CRD)
   - name: barman-cloud
     namespace: cnpg-system
-    chart: cnpg/plugin-barman-cloud
+    chart: cloudnative-pg/plugin-barman-cloud
     version: 0.4.0
     createNamespace: false
+    wait: true
     needs:
       - cert-manager/cert-manager
+      
+  # external secret manager
+  - name: external-secrets
+    namespace: external-secrets
+    chart: external-secrets/external-secrets
+    createNamespace: true
+
+  # CNPG Database Cluster
+  - name: database
+    namespace: database
+    chart: cloudnative-pg/cluster
+    createNamespace: true
+    needs:
+      - cnpg-system/cnpg
+  
