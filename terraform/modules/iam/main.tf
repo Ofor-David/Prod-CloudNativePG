@@ -25,12 +25,6 @@ resource "google_service_account" "cnpg_backup" {
   display_name = "cnpg-backup"
 }
 
-resource "google_storage_bucket_iam_member" "cnpg_backup_access" {
-  bucket = var.backup_bucket_name
-  role   = "roles/storage.objectAdmin"
-  member = "serviceAccount:${google_service_account.cnpg_backup.email}"
-}
-
 # Workload identity for cnpg SA (from serviceAccountTemplate)
 resource "google_service_account_iam_member" "workload_identity_binding" {
   service_account_id = google_service_account.cnpg_backup.name

@@ -18,3 +18,15 @@ resource "google_storage_bucket" "cnpg-backup" {
     }
   }
 }
+
+resource "google_storage_bucket_iam_member" "cnpg_backup_admin" {
+  bucket = google_storage_bucket.cnpg-backup.name
+  role   = "roles/storage.admin"
+  member = "serviceAccount:${var.cnpg_backup_sa_email}"
+}
+
+resource "google_storage_bucket_iam_member" "gke_node_admin" {
+  bucket = google_storage_bucket.cnpg-backup.name
+  role   = "roles/storage.admin"
+  member = "serviceAccount:${var.gke_node_sa_email}"
+}
