@@ -20,21 +20,40 @@ resource "google_project_iam_member" "gke_node_roles" {
   member  = "serviceAccount:${google_service_account.gke_nodes.email}"
 }
 
+
+////////////Backups
 resource "google_service_account" "cnpg_backup" {
   account_id   = "cnpg-backup"
   display_name = "cnpg-backup"
 }
-
 # Workload identity for cnpg SA (from serviceAccountTemplate)
 resource "google_service_account_iam_member" "workload_identity_binding" {
   service_account_id = google_service_account.cnpg_backup.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${var.project_id}.svc.id.goog[${var.namespace}/${var.ksa_name}]"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[${var.database_namespace}/${var.backup_ksa_name}]"
 }
-
 # Workload identity for cnpg-cluster SA (actual SA used by CNPG pods)
 resource "google_service_account_iam_member" "workload_identity_binding_cluster" {
   service_account_id = google_service_account.cnpg_backup.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${var.project_id}.svc.id.goog[${var.namespace}/cnpg-cluster]"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[${var.database_namespace}/cnpg-cluster]"
+}
+
+/////////////Secrets
+resource "google_service_account" "secrets-sa" {
+  account_id = "secrets-sa"
+  display_name = "secrets-sa"
+}
+resource "google_service_account_iam_member" "secrets-wif" {
+  service_account_id = google_service_account.secrets-sa.name
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[${var.secrets_namespace}/${var.secrets_ksa_name}]"
+}
+resource "google_project_iam_member" "secrets-sa-roles" {
+  for_each = toset([
+    "roles/secretmanager.admin"
+  ])
+  project = var.project_id
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.secrets-sa.email}"
 }

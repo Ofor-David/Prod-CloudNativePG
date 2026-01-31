@@ -29,10 +29,16 @@ variable "backup_bucket_name" {
   type = string
 }
 
-variable "ksa_name" {
+variable "backup_ksa_name" {
+  type = string
+}
+variable "secrets_ksa_name" {
+  type = string
+}
+variable "db_namespace" {
   type = string
 }
 
-variable "db_namespace" {
+variable "secrets_namespace" {
   type = string
 }

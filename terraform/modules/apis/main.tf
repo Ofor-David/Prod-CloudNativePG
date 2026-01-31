@@ -5,7 +5,8 @@ locals {
     "compute.googleapis.com",
     "servicenetworking.googleapis.com",
     "container.googleapis.com",
-    "gkehub.googleapis.com" 
+    "gkehub.googleapis.com",
+    "secretmanager.googleapis.com"
   ]
 }
 resource "google_project_service" "enabled_apis" {

@@ -5,9 +5,15 @@ variable "backup_bucket_name"{
 variable "project_id" {
   type = string
 }
-variable "namespace" {
+variable "database_namespace" {
   type = string
 }
-variable "ksa_name" {
+variable "secrets_namespace"{
+  type = string
+}
+variable "backup_ksa_name" {
+  type = string
+}
+variable "secrets_ksa_name" {
   type = string
 }

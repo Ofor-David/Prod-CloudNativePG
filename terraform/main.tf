@@ -7,8 +7,10 @@ module "iam" {
   source             = "./modules/iam"
   backup_bucket_name = module.backups.backup_bucket_name
   project_id         = var.project_id
-  ksa_name           = var.ksa_name
-  namespace          = var.db_namespace
+  backup_ksa_name = var.backup_ksa_name
+  secrets_ksa_name = var.secrets_ksa_name
+  database_namespace = var.db_namespace
+  secrets_namespace = var.secrets_namespace
 }
 module "gke" {
   depends_on   = [module.apis.prep]
