@@ -32,9 +32,12 @@ releases:
     namespace: database
     chart: cloudnative-pg/plugin-barman-cloud
     version: 0.4.0
-    createNamespace: false
+    createNamespace: true
     installed: true
     wait: true
+    needs:
+      - cert-manager/cert-manager
+
 
   # external secret manager
   - name: external-secrets
@@ -46,7 +49,7 @@ releases:
   - name: database
     namespace: database
     chart: cloudnative-pg/cluster
-    createNamespace: true
+    createNamespace: false
     needs:
-      - cnpg-system/cnpg
+      - database/barman-cloud
   
