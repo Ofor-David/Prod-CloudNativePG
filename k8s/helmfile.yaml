@@ -19,17 +19,9 @@ releases:
       - name: crds.enabled
         value: true
 
-  # CNPG Operator (includes barman-cloud plugin sidecar injection)
-  - name: cnpg
-    namespace: cnpg-system
-    chart: cloudnative-pg/cloudnative-pg
-    createNamespace: true
-    needs:
-      - cert-manager/cert-manager
-
   # Barman Cloud plugin CRD (required for ObjectStore and Backup CRDs)
   - name: barman-cloud
-    namespace: database
+    namespace: cnpg-system
     chart: cloudnative-pg/plugin-barman-cloud
     version: 0.4.0
     createNamespace: true
@@ -38,6 +30,15 @@ releases:
     needs:
       - cert-manager/cert-manager
 
+  # CNPG Operator (includes barman-cloud plugin sidecar injection)
+  - name: cnpg
+    namespace: cnpg-system
+    chart: cloudnative-pg/cloudnative-pg
+    createNamespace: true
+    wait: true
+    installed: true
+    needs:
+      - database/barman-cloud
 
   # external secret manager
   - name: external-secrets
@@ -52,4 +53,3 @@ releases:
     createNamespace: false
     needs:
       - database/barman-cloud
-  
