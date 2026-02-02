@@ -38,7 +38,7 @@ releases:
     wait: true
     installed: true
     needs:
-      - database/barman-cloud
+      - cnpg-system/barman-cloud
 
   # external secret manager
   - name: external-secrets
@@ -52,4 +52,4 @@ releases:
     chart: cloudnative-pg/cluster
     createNamespace: false
     needs:
-      - database/barman-cloud
+      - cnpg-system/barman-cloud
