@@ -22,3 +22,7 @@ spec:
     limits:
       memory: "1Gi"
       cpu: "1"
+  monitoring:
+    customQueriesConfigMap:
+      - name: cnpg-custom-metrics
+        key: custom-queries

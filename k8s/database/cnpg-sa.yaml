@@ -6,6 +6,7 @@ metadata:
   annotations:
     iam.gke.io/gcp-service-account: cnpg-backup@cnpg-project.iam.gserviceaccount.com
 ---
+
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -13,3 +14,32 @@ metadata:
   namespace: database
   annotations:
     iam.gke.io/gcp-service-account: cnpg-backup@cnpg-project.iam.gserviceaccount.com
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: get-configmaps
+  namespace: database
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["cnpg-custom-metrics"]
+    verbs: ["get", "list", "watch"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: get-configmaps-rb
+  namespace: database
+subjects:
+- kind: ServiceAccount
+  name: cnpg-cluster
+  namespace: database
+roleRef:
+  kind: Role
+  name: get-configmaps
+  apiGroup: rbac.authorization.k8s.io

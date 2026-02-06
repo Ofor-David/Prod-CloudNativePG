@@ -1,0 +1,25 @@
+#TODO: Fix custom queries
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cnpg-custom-metrics
+  namespace: database
+  labels:
+    cnpg.io/reload: ""
+data:
+  custom-queries: |
+      pg_tablespace_usage:
+        query: |
+          SELECT
+            pg_tablespace_size(t.oid)::numeric /
+            pg_database_size(current_database()) * 100 AS used_percent
+          FROM pg_tablespace t
+          WHERE pg_tablespace_location(t.oid) IS NOT NULL
+          ORDER BY used_percent DESC
+          LIMIT 1;
+        metrics:
+          - used_percent:
+              usage: "GAUGE"
+              description: "Tablespace disk usage percentage"
+        target_databases:
+          - "postgres"

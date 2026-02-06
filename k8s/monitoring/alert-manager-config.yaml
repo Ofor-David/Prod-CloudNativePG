@@ -1,0 +1,29 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: main-routing-config
+  namespace: monitoring
+  labels:
+    release:  kube-prometheus
+spec:
+  route:
+    receiver: "null-receiver"
+    # Order matters
+    routes:
+    - matchers:
+      - name: severity
+        value: critical
+      receiver: "critical-receiver"
+
+    - matchers:
+      - name: severity
+        value: warning
+      receiver: "warning-receiver"
+
+  receivers:
+  - name: "null-receiver"
+
+  - name: "critical-receiver"
+    # notification config
+
+  - name: "warning-receiver"
