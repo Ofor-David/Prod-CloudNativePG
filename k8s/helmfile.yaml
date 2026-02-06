@@ -56,6 +56,7 @@ releases:
     wait: true
     installed: true
     needs:
+      - cnpg-system/cnpg
       - cnpg-system/barman-cloud
 
   - name: kube-prometheus
